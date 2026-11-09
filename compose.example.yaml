@@ -1,0 +1,10 @@
+services:
+  db-catcher:
+    image: ghcr.io/andrewpaglusch/db-catcher:latest
+    container_name: db-catcher
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config.yaml:/config/config.yaml:ro
+    env_file: .env # AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY

@@ -1,0 +1,36 @@
+# Address to listen on. Defaults to :8080.
+listen: ":8080"
+
+# Serve HTTPS directly. Leave both empty when a reverse proxy handles TLS.
+# tls_cert: /config/cert.pem
+# tls_key: /config/key.pem
+
+# Credentials come from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.
+s3:
+  endpoint: https://s3.us-west-004.backblazeb2.com
+  region: us-west-004
+  bucket: my-db-dumps
+
+# Where alerts are POSTed. Each backup can override it.
+notify_webhook: https://hooks.slack.com/services/T000/B000/XXXX
+
+# Also alert immediately when an upload is rejected as incomplete.
+# Off by default; the overdue alert catches a broken backup job anyway.
+alert_on_invalid: false
+
+backups:
+  # id is the secret each database server sends as its bearer token.
+  # Generate one with: uuidgen | tr A-Z a-z
+  - id: 3f6c2a9e-5d1b-4c7e-8a2f-6b9d0e1c4a7b
+    name: prod-orders
+    type: postgres
+    keep: 14
+    alert_after_minutes: 1500
+
+  - id: 9b1d7f3a-2e6c-4b8d-9f0a-1c3e5a7b9d2f
+    name: billing
+    type: mysql
+    keep: 7
+    alert_after_minutes: 90
+    notify_webhook: https://ntfy.sh/your-billing-topic
+    alert_on_invalid: true
